@@ -62,3 +62,11 @@ jobs:
         with:
           name: ATenCXX-${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}
           path: artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX.artifactbundle.zip*
+
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX.artifactbundle.zip
+            artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX.artifactbundle.zip.checksum
