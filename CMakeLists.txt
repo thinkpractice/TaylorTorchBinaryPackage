@@ -102,7 +102,6 @@ if(BUILD_SPM_ARTIFACT)
     add_custom_command(
       TARGET ATenCXX POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E rm -rf "${SPM_BUNDLE_DIR}"
-      COMMAND ${CMAKE_COMMAND} -E rm -f "${SPM_BUNDLE_DIR}.zip"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/artifactbundle"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_BUNDLE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_VARIANT_ROOT}"
