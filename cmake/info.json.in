@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "artifacts": {
+    "ATenCXX": {
+      "version": "@PROJECT_VERSION@",
+      "variants": [
+        {
+          "path": "@SPM_VARIANT_DIR@/@SPM_TRIPLE@",
+          "supportedTriples": [
+            "@SPM_TRIPLE@"
+          ]
+        }
+      ]
+    }
+  }
+}
