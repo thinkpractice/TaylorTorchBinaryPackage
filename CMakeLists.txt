@@ -110,6 +110,7 @@ if(BUILD_SPM_ARTIFACT)
       COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:ATenCXX>" "${SPM_LIB_DIR}/"
       COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/ATenCXX/include" "${SPM_INCLUDE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBTORCH_ROOT}/lib" "${SPM_VARIANT_ROOT}/libtorch/lib"
+      COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${SPM_BUNDLE_DIR}.zip" --format=zip -C "${CMAKE_BINARY_DIR}/artifactbundle" "ATenCXX.artifactbundle"
       COMMENT "Staging SwiftPM artifact bundle in ${SPM_BUNDLE_DIR}"
     )
 
@@ -122,6 +123,10 @@ if(BUILD_SPM_ARTIFACT)
     add_custom_target(package-swift
       DEPENDS ATenCXX
       COMMENT "SwiftPM artifact bundle ready at ${SPM_BUNDLE_DIR}"
+    )
+    add_custom_target(package-swift-zip
+      DEPENDS ATenCXX
+      COMMENT "SwiftPM artifact bundle zip ready at ${SPM_BUNDLE_DIR}.zip"
     )
   endif()
 endif()
