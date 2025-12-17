@@ -18,10 +18,12 @@ jobs:
             os: ubuntu-latest
             compute: cpu
             triple: x86_64-unknown-linux-gnu
+            libtorch: "2.9.1"
           - name: macos-arm64-cpu
             os: macos-14
             compute: macos-arm64
             triple: arm64-apple-macosx
+            libtorch: "2.9.1"
 
     env:
       LIB_TORCH_COMPUTE_PLATFORM: ${{ matrix.compute }}
@@ -37,7 +39,7 @@ jobs:
 
       - name: Fetch libtorch
         run: |
-          bash ./get-pre-build-torch.sh --platform "${LIB_TORCH_COMPUTE_PLATFORM}" --output .
+          bash ./get-pre-build-torch.sh --version "${{ matrix.libtorch }}" --platform "${LIB_TORCH_COMPUTE_PLATFORM}" --output .
 
       - name: Configure
         run: |
@@ -49,7 +51,7 @@ jobs:
 
       - name: Collect artifacts and checksums
         run: |
-          ART_DIR="$PWD/artifacts/${{ matrix.triple }}-${{ matrix.compute }}"
+          ART_DIR="$PWD/artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}"
           mkdir -p "${ART_DIR}"
           cp build/artifactbundle/ATenCXX.artifactbundle.zip "${ART_DIR}/ATenCXX.artifactbundle.zip"
           shasum -a 256 "${ART_DIR}/ATenCXX.artifactbundle.zip" | awk '{print $1}' > "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
@@ -58,5 +60,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ATenCXX-${{ matrix.triple }}-${{ matrix.compute }}
-          path: artifacts/${{ matrix.triple }}-${{ matrix.compute }}/ATenCXX.artifactbundle.zip*
+          name: ATenCXX-${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}
+          path: artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX.artifactbundle.zip*
