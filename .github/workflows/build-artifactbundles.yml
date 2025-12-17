@@ -1,0 +1,62 @@
+name: Build SwiftPM artifactbundles
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x86_64-cpu
+            os: ubuntu-latest
+            compute: cpu
+            triple: x86_64-unknown-linux-gnu
+          - name: macos-arm64-cpu
+            os: macos-14
+            compute: macos-arm64
+            triple: arm64-apple-macosx
+
+    env:
+      LIB_TORCH_COMPUTE_PLATFORM: ${{ matrix.compute }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure build tools
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake wget || true
+
+      - name: Fetch libtorch
+        run: |
+          bash ./get-pre-build-torch.sh --platform "${LIB_TORCH_COMPUTE_PLATFORM}" --output .
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DLIBTORCH_ROOT="$PWD/libtorch"
+
+      - name: Build artifactbundle zip
+        run: |
+          cmake --build build --target package-swift-zip --config Release
+
+      - name: Collect artifacts and checksums
+        run: |
+          ART_DIR="$PWD/artifacts/${{ matrix.triple }}-${{ matrix.compute }}"
+          mkdir -p "${ART_DIR}"
+          cp build/artifactbundle/ATenCXX.artifactbundle.zip "${ART_DIR}/ATenCXX.artifactbundle.zip"
+          shasum -a 256 "${ART_DIR}/ATenCXX.artifactbundle.zip" | awk '{print $1}' > "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
+          cat "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ATenCXX-${{ matrix.triple }}-${{ matrix.compute }}
+          path: artifacts/${{ matrix.triple }}-${{ matrix.compute }}/ATenCXX.artifactbundle.zip*
