@@ -38,7 +38,12 @@ endif()
 # --------------------------------------------------------------------------
 # ATenCXX shim library
 # --------------------------------------------------------------------------
-add_library(ATenCXX STATIC ATenCXX/src/aten_shim.cpp)
+add_library(ATenCXX STATIC
+  ATenCXX/src/aten_shim.cpp
+  ATenCXX/include/aten_shim.hpp
+  ATenCXX/include/tensor_shim.hpp
+  ATenCXX/include/module.modulemap
+)
 target_include_directories(ATenCXX
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/ATenCXX/include
