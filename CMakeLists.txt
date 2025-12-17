@@ -99,12 +99,12 @@ if(BUILD_SPM_ARTIFACT)
     set(SPM_LIB_DIR "${SPM_VARIANT_ROOT}/lib")
     set(SPM_INCLUDE_DIR "${SPM_VARIANT_ROOT}/include")
 
-    file(MAKE_DIRECTORY "${SPM_LIB_DIR}")
-    file(MAKE_DIRECTORY "${SPM_INCLUDE_DIR}")
-
     add_custom_command(
       TARGET ATenCXX POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E rm -rf "${SPM_BUNDLE_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/artifactbundle"
+      COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_BUNDLE_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_VARIANT_ROOT}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_LIB_DIR}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_INCLUDE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:ATenCXX>" "${SPM_LIB_DIR}/"
