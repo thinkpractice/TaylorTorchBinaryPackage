@@ -99,9 +99,16 @@ if(BUILD_SPM_ARTIFACT)
     set(SPM_LIB_DIR "${SPM_VARIANT_ROOT}/lib")
     set(SPM_INCLUDE_DIR "${SPM_VARIANT_ROOT}/include")
 
+    configure_file(
+      cmake/info.json.in
+      ${CMAKE_BINARY_DIR}/info.json
+      @ONLY
+    )
+
     add_custom_command(
       TARGET ATenCXX POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E rm -rf "${SPM_BUNDLE_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E rm -f "${SPM_BUNDLE_DIR}.zip"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/artifactbundle"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_BUNDLE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_VARIANT_ROOT}"
@@ -110,14 +117,9 @@ if(BUILD_SPM_ARTIFACT)
       COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:ATenCXX>" "${SPM_LIB_DIR}/"
       COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/ATenCXX/include" "${SPM_INCLUDE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBTORCH_ROOT}/lib" "${SPM_VARIANT_ROOT}/libtorch/lib"
-      COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${SPM_BUNDLE_DIR}.zip" --format=zip -C "${CMAKE_BINARY_DIR}/artifactbundle" "ATenCXX.artifactbundle"
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/info.json" "${SPM_BUNDLE_DIR}/info.json"
+      COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${SPM_BUNDLE_DIR}.zip" --format=zip "${SPM_BUNDLE_DIR}"
       COMMENT "Staging SwiftPM artifact bundle in ${SPM_BUNDLE_DIR}"
-    )
-
-    configure_file(
-      cmake/info.json.in
-      ${SPM_BUNDLE_DIR}/info.json
-      @ONLY
     )
 
     add_custom_target(package-swift
