@@ -34,20 +34,36 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Ensure build tools
-        if: runner.os == 'macOS'
+        if: startsWith(matrix.os, 'macos')
         run: |
-          brew install cmake wget || true
+          brew install cmake wget curl || true
 
-      - name: Cache Swift toolchain
-        id: cache-swift
+      - name: Ensure build tools (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake wget curl
+
+      - name: Cache Swift toolchain (macOS)
+        if: startsWith(matrix.os, 'macos')
+        id: cache-swift-macos
         uses: actions/cache@v4
         with:
           path: |
             ~/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2025-11-03-a.xctoolchain
-          key: swift-toolchain-${{ runner.os }}-${{ env.SWIFT_VERSION }}
+          key: swift-toolchain-${{ matrix.os }}-${{ env.SWIFT_VERSION }}
 
-      - name: Install Swift via Swiftly
-        if: steps.cache-swift.outputs.cache-hit != 'true'
+      - name: Cache Swift toolchain (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        id: cache-swift-linux
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.swiftly/toolchains
+          key: swift-toolchain-${{ matrix.os }}-${{ env.SWIFT_VERSION }}
+
+      - name: Install Swift via Swiftly (macOS)
+        if: startsWith(matrix.os, 'macos') && steps.cache-swift-macos.outputs.cache-hit != 'true'
         run: |
           export PATH="$(brew --prefix gnu-getopt)/bin:$PATH"
           curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
@@ -59,6 +75,18 @@ jobs:
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
           rm swiftly.pkg
+          echo "✅ Swift ${SWIFT_VERSION} installed successfully"
+          swift --version
+
+      - name: Install Swift via Swiftly (Linux)
+        if: startsWith(matrix.os, 'ubuntu') && steps.cache-swift-linux.outputs.cache-hit != 'true'
+        run: |
+          curl -L https://swiftlang.github.io/swiftly/swiftly-install.sh | bash -s -- --skip-bashrc
+          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          hash -r
+          swiftly install ${SWIFT_VERSION} --assume-yes --use
+          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          hash -r
           echo "✅ Swift ${SWIFT_VERSION} installed successfully"
           swift --version
 
