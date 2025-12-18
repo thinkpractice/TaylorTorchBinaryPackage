@@ -2,11 +2,13 @@
   "schemaVersion": "1.0",
   "artifacts": {
     "ATenCXX": {
-      "type": "library",
+      "type": "staticLibrary",
       "version": "@PROJECT_VERSION@",
       "variants": [
         {
-          "path": "@SPM_VARIANT_PATH@",
+          "path": "@SPM_VARIANT_PATH@/lib/libAtenCXX.a",
+          "headers": "@SPM_VARIANT_PATH@/include",
+          "modulemap": "@SPM_VARIANT_PATH@/include/module.modulemap",
           "supportedTriples": [
             "@SPM_TRIPLE@"
           ]
