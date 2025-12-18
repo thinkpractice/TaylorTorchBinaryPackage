@@ -7,11 +7,13 @@
       "variants": [
         {
           "path": "@SPM_VARIANT_PATH@/lib/libATenCXX.a",
-          "headers": "@SPM_VARIANT_PATH@/include",
-          "modulemap": "@SPM_VARIANT_PATH@/include/module.modulemap",
           "supportedTriples": [
             "@SPM_TRIPLE@"
           ]
+          "staticLibraryMetadata": {
+            "headerPaths": ["@SPM_VARIANT_PATH@/include"],
+            "moduleMapPath": "@SPM_VARIANT_PATH@/include/module.modulemap",
+          }
         }
       ]
     }
