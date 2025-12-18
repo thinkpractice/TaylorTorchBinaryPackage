@@ -9,12 +9,12 @@
           "path": "@SPM_VARIANT_PATH@/lib/libATenCXX.a",
           "supportedTriples": [
             "@SPM_TRIPLE@"
-          ]
+          ],
           "staticLibraryMetadata": {
             "headerPaths": ["@SPM_VARIANT_PATH@/include"],
             "moduleMapPath": "@SPM_VARIANT_PATH@/include/module.modulemap",
-          }
-        }
+          },
+        },
       ]
     }
   }
