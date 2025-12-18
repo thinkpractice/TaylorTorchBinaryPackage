@@ -27,6 +27,7 @@ jobs:
 
     env:
       LIB_TORCH_COMPUTE_PLATFORM: ${{ matrix.compute }}
+      SWIFT_VERSION: swift-DEVELOPMENT-SNAPSHOT-2025-11-03
 
     steps:
       - name: Checkout
@@ -36,6 +37,30 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install cmake wget || true
+
+      - name: Cache Swift toolchain
+        id: cache-swift
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2025-11-03-a.xctoolchain
+          key: swift-toolchain-${{ runner.os }}-${{ env.SWIFT_VERSION }}
+
+      - name: Install Swift via Swiftly
+        if: steps.cache-swift.outputs.cache-hit != 'true'
+        run: |
+          export PATH="$(brew --prefix gnu-getopt)/bin:$PATH"
+          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
+          installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
+          ~/.swiftly/bin/swiftly init --quiet-shell-followup
+          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          hash -r
+          swiftly install ${SWIFT_VERSION} --assume-yes --use
+          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          hash -r
+          rm swiftly.pkg
+          echo "✅ Swift ${SWIFT_VERSION} installed successfully"
+          swift --version
 
       - name: Fetch libtorch
         run: |
