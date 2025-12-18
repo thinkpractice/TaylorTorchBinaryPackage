@@ -2,8 +2,8 @@
   "schemaVersion": "1.0",
   "artifacts": {
     "ATenCXX": {
-      "version": "@PROJECT_VERSION@",
       "type": "library",
+      "version": "@PROJECT_VERSION@",
       "variants": [
         {
           "path": "@SPM_TRIPLE@",
