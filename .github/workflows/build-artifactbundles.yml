@@ -133,7 +133,7 @@ jobs:
           ART_DIR="$PWD/artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}"
           mkdir -p "${ART_DIR}"
           cp build/artifactbundle/ATenCXX.artifactbundle.zip "${ART_DIR}/ATenCXX.artifactbundle.zip"
-          shasum -a 256 "${ART_DIR}/ATenCXX.artifactbundle.zip" | awk '{print $1}' > "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
+          swift package compute-checksum "${ART_DIR}/ATenCXX.artifactbundle.zip" > "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
           cat "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
 
       - name: Upload artifacts
