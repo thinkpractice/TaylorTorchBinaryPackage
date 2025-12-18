@@ -94,7 +94,8 @@ if(BUILD_SPM_ARTIFACT)
       endif()
     endif()
 
-    set(SPM_VARIANT_ROOT "${SPM_BUNDLE_DIR}/${SPM_TRIPLE}")
+    set(SPM_VARIANT_PATH "ATenCXX")
+    set(SPM_VARIANT_ROOT "${SPM_BUNDLE_DIR}/${SPM_VARIANT_PATH}")
     set(SPM_LIB_DIR "${SPM_VARIANT_ROOT}/lib")
     set(SPM_INCLUDE_DIR "${SPM_VARIANT_ROOT}/include")
 
