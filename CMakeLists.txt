@@ -78,8 +78,6 @@ if(BUILD_SPM_ARTIFACT)
   else()
     set(SPM_BUNDLE_PARENT "${CMAKE_BINARY_DIR}/artifactbundle")
     set(SPM_BUNDLE_DIR "${SPM_BUNDLE_PARENT}/ATenCXX.artifactbundle")
-    set(SPM_VARIANT_DIR artifacts)
-
     if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
       # Rely on host arch; adjust if you are building universal binaries.
       if(NOT CMAKE_OSX_ARCHITECTURES)
@@ -96,7 +94,7 @@ if(BUILD_SPM_ARTIFACT)
       endif()
     endif()
 
-    set(SPM_VARIANT_ROOT "${SPM_BUNDLE_DIR}/${SPM_VARIANT_DIR}/${SPM_TRIPLE}")
+    set(SPM_VARIANT_ROOT "${SPM_BUNDLE_DIR}/${SPM_TRIPLE}")
     set(SPM_LIB_DIR "${SPM_VARIANT_ROOT}/lib")
     set(SPM_INCLUDE_DIR "${SPM_VARIANT_ROOT}/include")
 

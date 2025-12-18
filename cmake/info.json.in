@@ -5,7 +5,7 @@
       "version": "@PROJECT_VERSION@",
       "variants": [
         {
-          "path": "@SPM_VARIANT_DIR@/@SPM_TRIPLE@",
+          "path": "@SPM_TRIPLE@",
           "supportedTriples": [
             "@SPM_TRIPLE@"
           ]
