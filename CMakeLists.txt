@@ -76,7 +76,8 @@ if(BUILD_SPM_ARTIFACT)
   if(NOT (CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "Darwin"))
     message(WARNING "SwiftPM artifact bundling is only wired up for Linux and macOS.")
   else()
-    set(SPM_BUNDLE_DIR ${CMAKE_BINARY_DIR}/artifactbundle/ATenCXX.artifactbundle)
+    set(SPM_BUNDLE_PARENT "${CMAKE_BINARY_DIR}/artifactbundle")
+    set(SPM_BUNDLE_DIR "${SPM_BUNDLE_PARENT}/ATenCXX.artifactbundle")
     set(SPM_VARIANT_DIR artifacts)
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
@@ -109,7 +110,7 @@ if(BUILD_SPM_ARTIFACT)
       TARGET ATenCXX POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E rm -rf "${SPM_BUNDLE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E rm -f "${SPM_BUNDLE_DIR}.zip"
-      COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/artifactbundle"
+      COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_BUNDLE_PARENT}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_BUNDLE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_VARIANT_ROOT}"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${SPM_LIB_DIR}"
@@ -118,7 +119,7 @@ if(BUILD_SPM_ARTIFACT)
       COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/ATenCXX/include" "${SPM_INCLUDE_DIR}"
       COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBTORCH_ROOT}/lib" "${SPM_VARIANT_ROOT}/libtorch/lib"
       COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/info.json" "${SPM_BUNDLE_DIR}/info.json"
-      COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${SPM_BUNDLE_DIR}.zip" --format=zip "${SPM_BUNDLE_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E chdir "${SPM_BUNDLE_PARENT}" ${CMAKE_COMMAND} -E tar "cfv" "${SPM_BUNDLE_DIR}.zip" --format=zip "ATenCXX.artifactbundle"
       COMMENT "Staging SwiftPM artifact bundle in ${SPM_BUNDLE_DIR}"
     )
 
