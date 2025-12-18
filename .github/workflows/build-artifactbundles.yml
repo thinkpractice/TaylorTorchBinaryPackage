@@ -71,10 +71,11 @@ jobs:
           export PATH="$(brew --prefix gnu-getopt)/bin:$PATH"
           curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
           installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
-          yes | ~/.swiftly/bin/swiftly init --quiet-shell-followup --skip-install -y
+          yes | ~/.swiftly/bin/swiftly init --quiet-shell-followup --skip-install --no-modify-profile
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
-          swiftly install ${SWIFT_VERSION} --assume-yes --use
+          swiftly install ${SWIFT_VERSION} --assume-yes
+          swiftly use ${SWIFT_VERSION}
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
           rm swiftly.pkg
