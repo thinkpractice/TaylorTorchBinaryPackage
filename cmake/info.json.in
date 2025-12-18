@@ -6,7 +6,7 @@
       "version": "@PROJECT_VERSION@",
       "variants": [
         {
-          "path": "@SPM_VARIANT_PATH@/lib/libAtenCXX.a",
+          "path": "@SPM_VARIANT_PATH@/lib/libATenCXX.a",
           "headers": "@SPM_VARIANT_PATH@/include",
           "modulemap": "@SPM_VARIANT_PATH@/include/module.modulemap",
           "supportedTriples": [
