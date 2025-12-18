@@ -42,7 +42,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake wget curl
+          sudo apt-get install -y cmake wget curl libcurl4-openssl-dev
 
       - name: Cache Swift toolchain (macOS)
         if: startsWith(matrix.os, 'macos')
@@ -68,7 +68,7 @@ jobs:
           export PATH="$(brew --prefix gnu-getopt)/bin:$PATH"
           curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
           installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
-          ~/.swiftly/bin/swiftly init --quiet-shell-followup -y
+          ~/.swiftly/bin/swiftly init --quiet-shell-followup --skip-install
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
           swiftly install ${SWIFT_VERSION} --assume-yes --use
@@ -83,7 +83,7 @@ jobs:
         run: |
           curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz
           tar zxf swiftly-$(uname -m).tar.gz
-          yes | ./swiftly init --quiet-shell-followup -y
+          yes | ./swiftly init --quiet-shell-followup --skip-install
           . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
           hash -r
           swiftly install ${SWIFT_VERSION} --assume-yes --use
