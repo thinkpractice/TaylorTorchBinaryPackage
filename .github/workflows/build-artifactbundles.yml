@@ -91,6 +91,26 @@ jobs:
           hash -r
           echo "✅ Swift ${SWIFT_VERSION} installed successfully"
           swift --version
+      - name: Set Swift toolchain env
+        if: startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu')
+        run: |
+          if [[ "${{ matrix.os }}" == macos* ]]; then
+            . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          else
+            . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
+          fi
+          hash -r
+          SWIFT_TOOLCHAIN_PATH="$(swiftly use --print-location)"
+          SWIFT_TOOLCHAIN_DIR="${SWIFT_TOOLCHAIN_PATH}/usr"
+          {
+            echo "SWIFT_TOOLCHAIN_PATH=${SWIFT_TOOLCHAIN_PATH}"
+            echo "SWIFT_TOOLCHAIN_DIR=${SWIFT_TOOLCHAIN_DIR}"
+            echo "CC=${SWIFT_TOOLCHAIN_DIR}/bin/clang"
+            echo "CXX=${SWIFT_TOOLCHAIN_DIR}/bin/clang++"
+            echo "SWIFT_TOOLCHAIN=${SWIFT_TOOLCHAIN_PATH}"
+            echo "SWIFT_BRIDGING_INCLUDE_DIR=${SWIFT_TOOLCHAIN_PATH}/usr/include"
+            echo "SWIFT_BIN_DIR=${SWIFT_TOOLCHAIN_DIR}/bin"
+          } >> "${GITHUB_ENV}"
 
       - name: Fetch libtorch
         run: |
