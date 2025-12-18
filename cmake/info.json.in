@@ -11,10 +11,13 @@
             "@SPM_TRIPLE@"
           ],
           "staticLibraryMetadata": {
-            "headerPaths": ["@SPM_VARIANT_PATH@/include"],
-            "moduleMapPath": "@SPM_VARIANT_PATH@/include/module.modulemap",
-          },
-        },
+            "headerPaths": [
+              "@SPM_VARIANT_PATH@/include",
+              "@SPM_VARIANT_PATH@/libtorch/include"
+            ],
+            "moduleMapPath": "@SPM_VARIANT_PATH@/include/module.modulemap"
+          }
+        }
       ]
     }
   }
