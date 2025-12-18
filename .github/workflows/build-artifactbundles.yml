@@ -81,11 +81,13 @@ jobs:
       - name: Install Swift via Swiftly (Linux)
         if: startsWith(matrix.os, 'ubuntu') && steps.cache-swift-linux.outputs.cache-hit != 'true'
         run: |
-          curl -L https://swiftlang.github.io/swiftly/swiftly-install.sh | bash -s --
-          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz
+          tar zxf swiftly-$(uname -m).tar.gz
+          ./swiftly init --quiet-shell-followup
+          . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
           hash -r
           swiftly install ${SWIFT_VERSION} --assume-yes --use
-          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
           hash -r
           echo "✅ Swift ${SWIFT_VERSION} installed successfully"
           swift --version
