@@ -74,7 +74,7 @@ jobs:
           ~/.swiftly/bin/swiftly init --quiet-shell-followup --skip-install --assume-yes
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
-          swiftly install ${SWIFT_VERSION} --assume-yes
+          yes | swiftly install ${SWIFT_VERSION}
           swiftly use ${SWIFT_VERSION}
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
