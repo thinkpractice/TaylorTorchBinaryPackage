@@ -69,7 +69,7 @@ jobs:
         if: startsWith(matrix.os, 'macos') && steps.cache-swift-macos.outputs.cache-hit != 'true'
         run: |
           export PATH="$(brew --prefix gnu-getopt)/bin:$PATH"
-          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg > swiftly.pkg
+          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
           installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
           ~/.swiftly/bin/swiftly init --quiet-shell-followup --skip-install --assume-yes
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
