@@ -47,14 +47,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake wget curl libcurl4-openssl-dev
 
-      - name: Cache Swift toolchain (macOS)
-        if: startsWith(matrix.os, 'macos')
-        id: cache-swift-macos
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/Library/Developer/Toolchains/${{ env.SWIFT_VERSION }}-a.xctoolchain
-          key: swift-toolchain-${{ matrix.os }}-${{ env.SWIFT_VERSION }}
+      # - name: Cache Swift toolchain (macOS)
+      #   if: startsWith(matrix.os, 'macos')
+      #   id: cache-swift-macos
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/Library/Developer/Toolchains/${{ env.SWIFT_VERSION }}-a.xctoolchain
+      #     key: swift-toolchain-${{ matrix.os }}-${{ env.SWIFT_VERSION }}
 
       - name: Cache Swift toolchain (Linux)
         if: startsWith(matrix.os, 'ubuntu')
