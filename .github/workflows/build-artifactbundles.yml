@@ -131,16 +131,17 @@ jobs:
       - name: Collect artifacts and checksums
         run: |
           ART_DIR="$PWD/artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}"
+          ART_BASENAME="ATenCXX-${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}"
           mkdir -p "${ART_DIR}"
-          cp build/artifactbundle/ATenCXX.artifactbundle.zip "${ART_DIR}/ATenCXX.artifactbundle.zip"
-          swift package compute-checksum "${ART_DIR}/ATenCXX.artifactbundle.zip" > "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
-          cat "${ART_DIR}/ATenCXX.artifactbundle.zip.checksum"
+          cp build/artifactbundle/ATenCXX.artifactbundle.zip "${ART_DIR}/${ART_BASENAME}.artifactbundle.zip"
+          swift package compute-checksum "${ART_DIR}/${ART_BASENAME}.artifactbundle.zip" > "${ART_DIR}/${ART_BASENAME}.artifactbundle.zip.checksum"
+          cat "${ART_DIR}/${ART_BASENAME}.artifactbundle.zip.checksum"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ATenCXX-${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}
-          path: artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX.artifactbundle.zip*
+          path: artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX-${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}.artifactbundle.zip*
 
   release:
     name: Publish GitHub Release Assets
@@ -158,5 +159,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/**/ATenCXX.artifactbundle.zip
-            artifacts/**/ATenCXX.artifactbundle.zip.checksum
+            artifacts/**/ATenCXX-*.artifactbundle.zip
+            artifacts/**/ATenCXX-*.artifactbundle.zip.checksum
