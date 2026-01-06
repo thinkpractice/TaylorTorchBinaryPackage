@@ -65,6 +65,15 @@ jobs:
             ~/.swiftly/toolchains
           key: swift-toolchain-${{ matrix.os }}-${{ env.SWIFT_VERSION }}
 
+      - name: Set Swiftly env (macOS)
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          {
+            echo "SWIFTLY_HOME_DIR=$HOME/.swiftly"
+            echo "SWIFTLY_BIN_DIR=$HOME/.swiftly/bin"
+            echo "SWIFTLY_TOOLCHAINS_DIR=$HOME/Library/Developer/Toolchains"
+          } >> "${GITHUB_ENV}"
+
       - name: Install Swift via Swiftly (macOS)
         if: startsWith(matrix.os, 'macos') && steps.cache-swift-macos.outputs.cache-hit != 'true'
         run: |
