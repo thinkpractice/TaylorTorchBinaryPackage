@@ -53,7 +53,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2025-11-03-a.xctoolchain
+            ~/Library/Developer/Toolchains/${{ env.SWIFT_VERSION }}-a.xctoolchain
           key: swift-toolchain-${{ matrix.os }}-${{ env.SWIFT_VERSION }}
 
       - name: Cache Swift toolchain (Linux)
@@ -69,9 +69,9 @@ jobs:
         if: startsWith(matrix.os, 'macos') && steps.cache-swift-macos.outputs.cache-hit != 'true'
         run: |
           export PATH="$(brew --prefix gnu-getopt)/bin:$PATH"
-          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
+          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg > swiftly.pkg
           installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
-          yes | ~/.swiftly/bin/swiftly init --quiet-shell-followup --skip-install --no-modify-profile
+          yes | ~/.swiftly/bin/swiftly init --quiet-shell-followup --skip-install
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
           swiftly install ${SWIFT_VERSION} --assume-yes
