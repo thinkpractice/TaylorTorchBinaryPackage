@@ -143,8 +143,8 @@ jobs:
           path: artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX.artifactbundle.zip*
 
       - name: Upload to GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
         with:
           files: |
             artifacts/${{ matrix.triple }}-${{ matrix.compute }}-v${{ matrix.libtorch }}/ATenCXX.artifactbundle.zip
